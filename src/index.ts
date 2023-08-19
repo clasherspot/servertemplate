@@ -5,7 +5,7 @@ import cors from "cors";
 import { roomHandler } from "./room";
 import { routeHandler } from "./routes";
 
-const port = 5000;
+const port = 2001;
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -15,18 +15,13 @@ const io = new Server(server, {
     origin: "*",
     methods: ["GET", "POST"],
   },
+  path: "/joyws",
 }).sockets;
 
 routeHandler(app);
 
 io.on("connection", (socket) => {
-  console.log("User connected", socket.id);
-
   roomHandler(socket);
-
-  socket.on("disconnect", () => {
-    console.log("User Disconnected", socket.id);
-  });
 });
 
 server.listen(port, async () => {
